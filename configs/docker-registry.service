@@ -1,0 +1,21 @@
+[Unit]
+Description=Dell Satellite Docker Registry
+Documentation=http://docs.docker.com
+After=network.target
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker run -p 5555:5000 \
+        -v /var/opt/docker/storage/registry:/tmp/registry \
+        -e STANDALONE=true \
+        -e MIRROR_SOURCE=https://registry.access.redhat.com \
+        -e GUNICORN_OPTS=["--preload"] \
+        --name dell-sat-reg \
+        dsw-registry:latest
+ExecStop=/usr/bin/docker stop -t 2 dell-sat-reg ; /usr/bin/docker rm -f dell-sat-reg
+SyslogIdentifier=dell-sat-reg
+
+[Install]
+WantedBy=multi-user.target

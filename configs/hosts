@@ -1,0 +1,34 @@
+# Create an OSEv3 group that contains the masters and nodes groups
+[OSEv3:children]
+masters
+nodes
+
+# Set variables common for all OSEv3 hosts
+[OSEv3:vars]
+# SSH user, this user should allow ssh based auth without requiring a password
+
+# If ansible_ssh_user is not root, ansible_sudo must be set to true
+#ansible_sudo=true
+
+# To deploy origin, change deployment_type to origin
+deployment_type=enterprise
+ansible_ssh_user=root
+# enable ldap authentication
+openshift_master_identity_providers=[{'name':'dell_ldap_provider','login':'true','challenge':'true','kind':'LDAPPasswordIdentityProvider','attributes':{'id':['dn'],'email':['mail'],'name':['cn'],'preferredUsername':['sAMAccountName']},'insecure':'true','ca':'','bindDN':'openshift-svc','bindPassword':'REDACTED','url':'ldap://something.com/dc=something,dc=com?sAMAccountName?sub?(memberOf=CN=SOMETHING,OU=Group,DC=something,DC=com)'}]
+
+#clusterNetworkCIDR
+osm_cluster_network_cidr=12.13.0.0/16
+#servicesSubnet
+openshift_master_portal_net=172.39.0.0/16
+
+# host group for masters
+[masters]
+hostname.srv.secureworkslab.com
+
+# host group for nodes, includes region info
+[nodes]
+host.srv.secureworkslab.com openshift_node_labels="{'region': 'pvd'}"
+host2.srv.secureworkslab.com openshift_node_labels="{'region': 'pvd'}"
+host3.srv.secureworkslab.com openshift_node_labels="{'region': 'pvd'}"
+host4.srv.secureworkslab.com openshift_node_labels="{'region': 'pvd'}"
+

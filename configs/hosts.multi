@@ -1,0 +1,43 @@
+# Create an OSEv3 group that contains the masters and nodes groups
+[OSEv3:children]
+masters
+etcd
+nodes
+
+# Set variables common for all OSEv3 hosts
+[OSEv3:vars]
+# SSH user, this user should allow ssh based auth without requiring a password
+
+# If ansible_ssh_user is not root, ansible_sudo must be set to true
+#ansible_sudo=true
+
+# To deploy origin, change deployment_type to origin
+deployment_type=enterprise
+ansible_ssh_user=root
+# enable ldap authentication
+#see other file for ldap settings
+
+#see other file for variables
+#clusterNetworkCIDR
+#servicesSubnet
+
+osm_default_subdomain=<default hostname for apps>
+
+#This password I think is whatever you set it to be for pacemaker (pcs)
+openshift_master_cluster_password=
+#This should be whatever vip Rocky sets up for you
+openshift_master_cluster_vip=
+openshift_master_cluster_public_vip=
+#This hostname needs to resovle to the VIP, right now I'm cheating and using the routers vip
+#Obviously this won't work if you plan on actually using the router, so get a new hostname
+openshift_master_cluster_hostname
+openshift_master_cluster_public_hostname=
+
+# host group for masters
+[masters]
+
+[etcd]
+
+# host group for nodes, includes region info
+[nodes]
+
